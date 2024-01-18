@@ -13,48 +13,58 @@
         <div class="row mt-4">
             <div class="col-8">
                 <ul id="todo-list">
-                    <li>Sample To-Do List Item</li>
                 </ul>
             </div>
             <div class="col-4">
-                [add new]
+                <form>
+                    <input type="text" class="form-control" id="todoTitle" placeholder="Enter Your To Do...">
+                    <button onClick="newTodo()" class="addBtn btn btn-sm btn-info form-control mt-3">Add To Do</button>
+                </form>
             </div>
         </div>
     </div>
 </body>
 
 <script>
-    var json_data = [
-        {
-            "userID" : 1,
-            "id" : 1,
-            "title" : "Task title 1",
-            "completed" : false
-        },
-        {
-            "userID" : 1,
-            "id" : 2,
-            "title" : "Task title 2",
-            "completed" : false
-        },
-        {
-            "userID" : 1,
-            "id" : 3,
-            "title" : "Task title 3",
-            "completed" : false
-        },
-        {
-            "userID" : 1,
-            "id" : 4,
-            "title" : "Task title 4",
-            "completed" : true
-        },
-        {
-            "userID" : 1,
-            "id" : 5,
-            "title" : "Task title 5",
-            "completed" : false
-        },
-    ];
+    var json_data = [];
+    
+    var myList = document.getElementById("todo-list");
+
+    json_data.forEach(element => {
+        newTodo(element.title);
+    });
+    registerEventListeners();
+
+    function registerEventListeners() {
+        var closeButtons = document.getElementsByClassName("delete");
+        for (var i=0; i < closeButtons.length; i++){
+            closeButtons[i].addEventListener('click', deleteTodo, false);
+        }
+    }
+
+    function deleteTodo() {
+        var li = this.parentElement;
+        myList.removeChild(li);
+    }
+
+    function newTodo(todoTitle) {
+        if (!todoTitle) {
+            todoTitle = document.getElementById("todoTitle").value;
+        }
+        var listItem = document.createElement("li");
+        listItem.appendChild(
+            document.createTextNode(todoTitle)
+        );
+        var deleteLink = document.createElement("a");
+        deleteLink.href = "#";
+        deleteLink.className = "btn btn-sm btn-outline-info m-1 delete";
+        deleteLink.appendChild(
+            document.createTextNode("Delete")
+        );
+        listItem.appendChild(deleteLink);
+        myList.appendChild(listItem);
+        registerEventListeners();
+    }
 </script>
+
 </html>
