@@ -30,7 +30,6 @@
     <script>
 
         var json_data = JSON.parse(localStorage.getItem('json_data'));
-        var myList = document.getElementById("todo-list");
 
         if (json_data) {
             json_data.forEach(element => {
@@ -43,12 +42,6 @@
         registerEventListeners();
 
         function registerEventListeners() {
-
-            // var closeButtons = document.getElementsByClassName("delete");
-            // for (var i=0; i < closeButtons.length; i++){
-            //     closeButtons[i].addEventListener('click', deleteTodo, false);
-            // }
-
             $(".delete").on("click", function() {
                 var todoID = $(this).parent().attr('data-id');
                 deleteTodo(todoID);
@@ -56,9 +49,6 @@
         }
 
         function deleteTodo() {
-            // var li = this.parentElement;
-            // myList.removeChild(li);
-
             $("li[data-id="+todoID+"]").remove();
             var json_temp = JSON.parse(localStorage.getItem('json_data'));
             delete json_temp[todoID];
@@ -72,22 +62,9 @@
                 todoTitle = document.getElementById("todoTitle").value;
                 var todoID = storeTodoLocal(todoTitle);
             }
-            // var listItem = document.createElement("li");
-            // listItem.dataset.id = todoID;
-            // listItem.appendChild(
-            //     document.createTextNode(todoTitle)
-            // );
-            // var deleteLink = document.createElement("a");
-            // deleteLink.href = "#";
-            // deleteLink.className = "btn btn-sm btn-outline-info m-1 delete";
-            // deleteLink.appendChild(
-            //     document.createTextNode("Delete")
-            // );
-            // listItem.appendChild(deleteLink);
-            // myList.appendChild(listItem);
             var todoHTML = '<li data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-outline-info m-1 delete">Delete</a></li>';
             $("#todo-list").append(todoHTML);
-            
+
             registerEventListeners();
             console.log("new todo added");
             console.log(listItem);
@@ -120,7 +97,6 @@
         function deleteAllTodo() {
             if (confirm("Are you sure you want to delete all your To Dos?")) {
             localStorage.removeItem('json_data');
-            //myList.innerHTML = '';
             $("#todo-list").empty();
             }
         }
