@@ -1,70 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Javascript To-Do App</h1>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Javascript To-Do App</h1>
 
-        <div class="row mt-4">
-            <div class="col-8">
-                <ul id="todo-list">
-                </ul>
-            </div>
-            <div class="col-4">
-                <form>
-                    <input type="text" class="form-control" id="todoTitle" placeholder="Enter Your To Do...">
-                    <button onClick="newTodo()" class="addBtn btn btn-sm btn-info form-control mt-3">Add To Do</button>
-                </form>
+            <div class="row mt-4">
+                <div class="col-8">
+                    <ul id="todo-list">
+                    </ul>
+                </div>
+                <div class="col-4">
+                    <form>
+                        <input type="text" class="form-control" id="todoTitle" placeholder="Enter Your To Do...">
+                        <button onClick="newTodo()" class="addBtn btn btn-sm btn-info form-control mt-3">Add To Do</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 
-<script>
-    var json_data = [];
-    
-    var myList = document.getElementById("todo-list");
+    <script>
+        // var json_data = [
+        //     {
+        //         "title" : "sample todo item",
+        //         "completed" : false
+        //     }
+        // ];
 
-    json_data.forEach(element => {
-        newTodo(element.title);
-    });
-    registerEventListeners();
+        var json_data = localStorage.getItem('json_data');
+        var myList = document.getElementById("todo-list");
 
-    function registerEventListeners() {
-        var closeButtons = document.getElementsByClassName("delete");
-        for (var i=0; i < closeButtons.length; i++){
-            closeButtons[i].addEventListener('click', deleteTodo, false);
+        if (json_data) {
+            json_data.forEach(element => {
+            newTodo(element.title);
+            });
         }
-    }
 
-    function deleteTodo() {
-        var li = this.parentElement;
-        myList.removeChild(li);
-    }
-
-    function newTodo(todoTitle) {
-        if (!todoTitle) {
-            todoTitle = document.getElementById("todoTitle").value;
-        }
-        var listItem = document.createElement("li");
-        listItem.appendChild(
-            document.createTextNode(todoTitle)
-        );
-        var deleteLink = document.createElement("a");
-        deleteLink.href = "#";
-        deleteLink.className = "btn btn-sm btn-outline-info m-1 delete";
-        deleteLink.appendChild(
-            document.createTextNode("Delete")
-        );
-        listItem.appendChild(deleteLink);
-        myList.appendChild(listItem);
         registerEventListeners();
-    }
-</script>
+
+        function registerEventListeners() {
+            var closeButtons = document.getElementsByClassName("delete");
+            for (var i=0; i < closeButtons.length; i++){
+                closeButtons[i].addEventListener('click', deleteTodo, false);
+            }
+        }
+
+        function deleteTodo() {
+            var li = this.parentElement;
+            myList.removeChild(li);
+        }
+
+        function newTodo(todoTitle) {
+            if (!todoTitle) {
+                todoTitle = document.getElementById("todoTitle").value;
+                storeTodoLocal(todoTitle);
+            }
+            var listItem = document.createElement("li");
+            listItem.appendChild(
+                document.createTextNode(todoTitle)
+            );
+            var deleteLink = document.createElement("a");
+            deleteLink.href = "#";
+            deleteLink.className = "btn btn-sm btn-outline-info m-1 delete";
+            deleteLink.appendChild(
+                document.createTextNode("Delete")
+            );
+            listItem.appendChild(deleteLink);
+            myList.appendChild(listItem);
+            registerEventListeners();
+            console.log("new todo added");
+            console.log(listItem);
+        }
+
+        function storeTodoLocal(todoTitle){
+            //retrieve and parse existing json from localstorage
+            var json_temp = JSON.parse(localStorage.getItem('json_data'));
+            if (!json_temp) {
+                json_temp = [];
+            }
+            //add new todo object to JSON
+            json_temp.push({
+                "title": todoTitle,
+                "completed": false
+            });
+            //log updated JSON to console
+            console.log(json_temp);
+            //stringify updated JSON and store back in localStorage
+            localStorage.setItem('json_data',
+            JSON.stringify(json_temp)
+            );
+        }
+    </script>
 
 </html>
