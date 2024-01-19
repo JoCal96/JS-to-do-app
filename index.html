@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <title>Document</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <title>To Do App</title>
     </head>
     <body>
         <div class="container">
@@ -42,17 +43,25 @@
         registerEventListeners();
 
         function registerEventListeners() {
-            var closeButtons = document.getElementsByClassName("delete");
-            for (var i=0; i < closeButtons.length; i++){
-                closeButtons[i].addEventListener('click', deleteTodo, false);
-            }
+
+            // var closeButtons = document.getElementsByClassName("delete");
+            // for (var i=0; i < closeButtons.length; i++){
+            //     closeButtons[i].addEventListener('click', deleteTodo, false);
+            // }
+
+            $(".delete").on("click", function() {
+                var todoID = $(this).parent().attr('data-id');
+                deleteTodo(todoID);
+            });
         }
 
         function deleteTodo() {
-            var li = this.parentElement;
-            myList.removeChild(li);
+            // var li = this.parentElement;
+            // myList.removeChild(li);
+
+            $("li[data-id="+todoID+"]").remove();
             var json_temp = JSON.parse(localStorage.getItem('json_data'));
-            delete json_temp[li.dataset.id];
+            delete json_temp[todoID];
             localStorage.setItem('json_data',
             JSON.stringify(json_temp)
             );
@@ -63,19 +72,22 @@
                 todoTitle = document.getElementById("todoTitle").value;
                 var todoID = storeTodoLocal(todoTitle);
             }
-            var listItem = document.createElement("li");
-            listItem.dataset.id = todoID;
-            listItem.appendChild(
-                document.createTextNode(todoTitle)
-            );
-            var deleteLink = document.createElement("a");
-            deleteLink.href = "#";
-            deleteLink.className = "btn btn-sm btn-outline-info m-1 delete";
-            deleteLink.appendChild(
-                document.createTextNode("Delete")
-            );
-            listItem.appendChild(deleteLink);
-            myList.appendChild(listItem);
+            // var listItem = document.createElement("li");
+            // listItem.dataset.id = todoID;
+            // listItem.appendChild(
+            //     document.createTextNode(todoTitle)
+            // );
+            // var deleteLink = document.createElement("a");
+            // deleteLink.href = "#";
+            // deleteLink.className = "btn btn-sm btn-outline-info m-1 delete";
+            // deleteLink.appendChild(
+            //     document.createTextNode("Delete")
+            // );
+            // listItem.appendChild(deleteLink);
+            // myList.appendChild(listItem);
+            var todoHTML = '<li data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-outline-info m-1 delete">Delete</a></li>';
+            $("#todo-list").append(todoHTML);
+            
             registerEventListeners();
             console.log("new todo added");
             console.log(listItem);
@@ -108,7 +120,8 @@
         function deleteAllTodo() {
             if (confirm("Are you sure you want to delete all your To Dos?")) {
             localStorage.removeItem('json_data');
-            myList.innerHTML = '';
+            //myList.innerHTML = '';
+            $("#todo-list").empty();
             }
         }
 
