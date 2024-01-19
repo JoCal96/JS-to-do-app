@@ -11,34 +11,31 @@
             <h1>Javascript To-Do App</h1>
 
             <div class="row mt-4">
-                <div class="col-8">
+                <div class="col-md-8">
                     <ul id="todo-list">
                     </ul>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     <form>
                         <input type="text" class="form-control" id="todoTitle" placeholder="Enter Your To Do...">
-                        <button onClick="newTodo()" class="addBtn btn btn-sm btn-info form-control mt-3">Add To Do</button>
+                        <button onClick="newTodo()" class="addBtn btn btn-sm btn-info form-control mt-3">Add To Do</span>
                     </form>
+                    <button onClick="deleteAllTodo()" class="addBtn btn btn-sm btn-primary form-control mt-5">Delete All To Dos</span>
                 </div>
             </div>
         </div>
     </body>
 
     <script>
-        // var json_data = [
-        //     {
-        //         "title" : "sample todo item",
-        //         "completed" : false
-        //     }
-        // ];
 
-        var json_data = localStorage.getItem('json_data');
+        var json_data = JSON.parse(localStorage.getItem('json_data'));
         var myList = document.getElementById("todo-list");
 
         if (json_data) {
             json_data.forEach(element => {
-            newTodo(element.title);
+                if (element) {
+                    newTodo(element.title, element.id);
+                }
             });
         }
 
@@ -54,14 +51,20 @@
         function deleteTodo() {
             var li = this.parentElement;
             myList.removeChild(li);
+            var json_temp = JSON.parse(localStorage.getItem('json_data'));
+            delete json_temp[li.dataset.id];
+            localStorage.setItem('json_data',
+            JSON.stringify(json_temp)
+            );
         }
 
-        function newTodo(todoTitle) {
-            if (!todoTitle) {
+        function newTodo(todoTitle, todoID) {
+            if (!todoTitle && !todoID) {
                 todoTitle = document.getElementById("todoTitle").value;
-                storeTodoLocal(todoTitle);
+                var todoID = storeTodoLocal(todoTitle);
             }
             var listItem = document.createElement("li");
+            listItem.dataset.id = todoID;
             listItem.appendChild(
                 document.createTextNode(todoTitle)
             );
@@ -78,14 +81,17 @@
             console.log(listItem);
         }
 
-        function storeTodoLocal(todoTitle){
+        function storeTodoLocal(todoTitle) {
             //retrieve and parse existing json from localstorage
             var json_temp = JSON.parse(localStorage.getItem('json_data'));
             if (!json_temp) {
                 json_temp = [];
             }
+            var todoID = json_temp.length;
+
             //add new todo object to JSON
             json_temp.push({
+                "id": todoID,
                 "title": todoTitle,
                 "completed": false
             });
@@ -95,7 +101,17 @@
             localStorage.setItem('json_data',
             JSON.stringify(json_temp)
             );
+            //return ID of new todo
+            return todoID;
         }
+
+        function deleteAllTodo() {
+            if (confirm("Are you sure you want to delete all your To Dos?")) {
+            localStorage.removeItem('json_data');
+            myList.innerHTML = '';
+            }
+        }
+
     </script>
 
 </html>
