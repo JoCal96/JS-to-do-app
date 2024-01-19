@@ -48,8 +48,8 @@
             });
         }
 
-        function deleteTodo() {
-            $("li[data-id="+todoID+"]").remove();
+        function deleteTodo(todoID) {
+            $("li[data-id="+todoID+"]").fadeOut();
             var json_temp = JSON.parse(localStorage.getItem('json_data'));
             delete json_temp[todoID];
             localStorage.setItem('json_data',
@@ -60,14 +60,19 @@
         function newTodo(todoTitle, todoID) {
             if (!todoTitle && !todoID) {
                 todoTitle = document.getElementById("todoTitle").value;
-                var todoID = storeTodoLocal(todoTitle);
+                if (todoTitle){
+                    var todoID = storeTodoLocal(todoTitle);
+                }
             }
-            var todoHTML = '<li data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-outline-info m-1 delete">Delete</a></li>';
+            if(todoTitle){
+                var todoHTML = '<li style="display:none" data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-outline-info m-1 delete">Delete</a></li>';
             $("#todo-list").append(todoHTML);
+            $("li[data-id="+todoID+"]").fadeIn();
 
             registerEventListeners();
             console.log("new todo added");
             console.log(listItem);
+            } 
         }
 
         function storeTodoLocal(todoTitle) {
