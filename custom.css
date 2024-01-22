@@ -1,0 +1,111 @@
+body {
+    background-color: #cbc0d3;
+    min-height: 100vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Navbar/Head Colouring */
+.navbar {
+    background-color: #8e9aaf;
+}
+.navbar .navbar-brand {
+    font-size: 1.8em;
+    color: #efd3d7;
+    font-family: 'Comforter Brush', cursive;
+}
+
+.container1 .title {
+    text-align:right;
+    color: #efd3d7;
+}
+
+.container .subtitle {
+    padding: 1rem; 
+    font-size: 1.7em;
+}
+
+/* To Do Styling */
+#todo-list {
+    font-size: 1.5em;
+}
+.todoli {
+    padding: 1.5%;
+    list-style-image: "fa-solid fa-heart" style="color: #54125a;"
+}
+
+
+/* Add-ToDo Form Styling*/
+h3 {
+    margin-bottom: 1rem;
+}
+.forminput {
+    padding: 2%;
+}
+
+/* Button Colouring */
+.btn-add {
+    background-color: pink;
+    outline: purple;
+}
+
+.btn-add:hover {
+    background-color: #efd3d7;
+}
+
+.btn-add:visited{
+    background-color: pink;
+    outline: purple;
+}
+
+.btn-add:active{
+    background-color: pink;
+    outline: purple;
+}
+
+.btn-deleteall {
+    background-color: #8e9aaf;
+}
+
+.btn-deleteall:hover {
+    background-color: rgb(84, 18, 90);
+    color: white;
+}
+
+.btn-deleteall:active {
+    background-color: rgb(84, 18, 90);
+    color: white;
+}
+
+.btn-deleteall:visited {
+    background-color: #8e9aaf;
+}
+
+.btn-delete {
+    background-color: #8e9aaf;
+    margin-left: 5%;
+}
+
+.btn-delete:hover {
+    background-color: rgb(84, 18, 90);
+    color:white;
+}
+
+
+/* Footer Editing */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 4.5rem;
+    background-color: #8e9aaf;
+}
+
+footer a {
+    position: absolute;
+    bottom: 0;
+    right: 2%;
+    color: #efd3d7;
+    font-size: 1.6em;
+    font-family: 'Comforter Brush', cursive;
+}
