@@ -1,3 +1,4 @@
+
 var json_data = JSON.parse(localStorage.getItem('json_data'));
 
 if (json_data) {
@@ -15,8 +16,25 @@ function registerEventListeners() {
         var todoID = $(this).parent().attr('data-id');
             deleteTodo(todoID);
     });
-}
 
+    $(".view").on("click", function(){
+        var todoID = $(this).parent().attr('data-id');
+            viewTodo(todoID);
+    });
+
+    $(".edit").on("click", function(){
+        var todoID = $(this).parent().attr('data-id');
+            editTodo(todoID);
+    });
+
+    $(".save").on("click", function(){
+        var todoID = $(this).parent().attr('data-id');
+            saveTodo(todoID);
+    });
+}
+        
+
+//Function to delete an individual todo
 function deleteTodo(todoID) {
     $("li[data-id="+todoID+"]").fadeOut();
     var json_temp = JSON.parse(localStorage.getItem('json_data'));
@@ -25,17 +43,20 @@ function deleteTodo(todoID) {
     JSON.stringify(json_temp)
     );
 }
-
+// create a new todo with view and delete buttons
 function newTodo(todoTitle, todoID) {
     if (!todoTitle && !todoID) {
         todoTitle = document.getElementById("todoTitle").value;
+        todoNote = document.getElementById("todoNote").value;
         if (todoTitle){
             var todoID = storeTodoLocal(todoTitle);
         }
     }
     if(todoTitle){
-        var todoHTML = '<li class="todoli" style="display:none" data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-delete delete">Delete</a></li>';
-    $("#todo-list").append(todoHTML);
+        var todoHTML = '<li class="todoli" style="display:none" data-id="' + todoID + '">' + todoTitle ;
+        todoViewBtn = ' <br><a href="#" class="btn btn-sm btn-add view">View</a>'
+        todoDeleteBtn = '<a href="#" class="btn btn-sm btn-delete delete">Delete</a> </li>'
+    $("#todo-list").append(todoHTML + todoViewBtn + todoDeleteBtn);
     $("li[data-id="+todoID+"]").fadeIn();
 
     registerEventListeners();
@@ -56,6 +77,7 @@ function storeTodoLocal(todoTitle) {
     json_temp.push({
         "id": todoID,
         "title": todoTitle,
+        "notes": todoNote,
         "completed": false
     });
 
@@ -71,9 +93,59 @@ function storeTodoLocal(todoTitle) {
     return todoID;
  }
 
+ //Button to delete all the todos in the list
 function deleteAllTodo() {
     if (confirm("Are you sure you want to delete all your To Dos?")) {
     localStorage.removeItem('json_data');
     $("#todo-list").empty();
     }
+}
+
+//Function to view the todo in the list
+function viewTodo(todoID){
+    var popout = document.getElementById("view-popout");
+    var close = document.getElementsByClassName("popout-close");
+    
+    var json_temp = JSON.parse(localStorage.getItem('json_data'));
+    var selectedTodo = json_temp[todoID];
+
+    $("#view-popout .modal-title").text(selectedTodo.title);
+    $("#view-popout .modal-body").html('<p>Notes: ' + selectedTodo.notes + '</p>');
+    
+    $("#view-popout .edit-todo").remove();
+    $("#view-popout .edit-delete").remove();
+    $("#view-popout .modal-footer").append('<button class="btn btn-add edit-todo" onclick="editTodo(' + todoID + ')">Edit</button>');
+    $("#view-popout .modal-footer").append('<button type="button" class="btn btn-delete edit-delete" data-bs-dismiss="modal">Close</button>')
+
+    $("#view-popout").modal('show');
+    
+    registerEventListeners();
+}
+
+//Function to edit the todo
+function editTodo(todoID){
+    var json_temp = JSON.parse(localStorage.getItem('json_data'));
+    var selectedTodo = json_temp[todoID];
+
+    $('#edit-popout #edit-title').val(selectedTodo.title);
+    $('#edit-popout #edit-notes').val(selectedTodo.notes);
+    $("#edit-popout #edit-id").val(todoID);
+
+    $('#view-popout').modal('hide');
+    $('#edit-popout').modal('show');
+    registerEditListeners();
+}
+
+function saveTodo(todoID){
+    var todoID = $("#edit-id").val();
+    var json_temp = JSON.parse(localStorage.getItem('json_data'));
+    var selectedTodo = json_temp[todoID];
+
+    selectedTodo.title = $("#edit-popout #edit-title").val();
+    selectedTodo.notes = $("#edit-popout #edit-notes").val();
+
+    json_temp[todoID] = selectedTodo;
+    localStorage.setItem('json_data', JSON.stringify(json_temp));
+    $("#edit-popout").modal('hide');
+    $("#view-popout").modal('show');
 }
