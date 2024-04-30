@@ -29,8 +29,18 @@ body {
     font-size: 1.5em;
 }
 .todoli {
-    padding: 1.5%;
-    list-style-image: "fa-solid fa-heart" style="color: #54125a;"
+    padding-bottom: 0.4em;
+}
+.todoli > li {
+    list-style: none;
+}
+
+.todo-title {
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.todo-date {
+    margin-left: 10px; /* Adjust the margin as needed */
 }
 
 /*Pop Up Styling */
@@ -43,7 +53,12 @@ body {
     background-color: #efd3d7;
 }
 
-
+.modal-title {
+    font-weight: bold;
+    font-size: 1em;
+    margin-left: 1em;
+    margin-top: 0.3em;
+}
 
 /* Add-ToDo Form Styling*/
 h3 {
