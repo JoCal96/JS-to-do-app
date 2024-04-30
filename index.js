@@ -26,11 +26,6 @@ function registerEventListeners() {
         var todoID = $(this).parent().attr('data-id');
             editTodo(todoID);
     });
-
-    $(".save").on("click", function(){
-        var todoID = $(this).parent().attr('data-id');
-            saveTodo(todoID);
-    });
 }
         
 
@@ -44,28 +39,29 @@ function deleteTodo(todoID) {
     );
 }
 // create a new todo with view and delete buttons
-function newTodo(todoTitle, todoID) {
+function newTodo(todoTitle, todoID, todoNote, todoDate) {
     if (!todoTitle && !todoID) {
         todoTitle = document.getElementById("todoTitle").value;
         todoNote = document.getElementById("todoNote").value;
+        var todoDate = document.getElementById("todoDate").value;
+
         if (todoTitle){
-            var todoID = storeTodoLocal(todoTitle);
+            var todoID = storeTodoLocal(todoTitle, todoNote, todoDate);
         }
     }
-    if(todoTitle){
-        var todoHTML = '<li class="todoli" style="display:none" data-id="' + todoID + '">' + todoTitle ;
-        todoViewBtn = ' <br><a href="#" class="btn btn-sm btn-add view">View</a>'
-        todoDeleteBtn = '<a href="#" class="btn btn-sm btn-delete delete">Delete</a> </li>'
-    $("#todo-list").append(todoHTML + todoViewBtn + todoDeleteBtn);
-    $("li[data-id="+todoID+"]").fadeIn();
 
-    registerEventListeners();
-    console.log("new todo added");
-    console.log(listItem);
+    if(todoTitle){
+        var todoHTML = '<li class="todoli col-9" data-id="' + todoID + '">' + todoTitle;
+        todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-add view">View</a>'
+        todoDeleteBtn = '<a href="#" class="col-2 btn btn-sm btn-delete delete">Delete</a></li>'
+        $("#todo-list").append(todoHTML + todoViewBtn + todoDeleteBtn);
+        $("li[data-id="+todoID+"]").fadeIn();
+
+        registerEventListeners();
     } 
 }
 
-function storeTodoLocal(todoTitle) {
+function storeTodoLocal(todoTitle, todoNote, todoDate) {
     //retrieve and parse existing json from localstorage
     var json_temp = JSON.parse(localStorage.getItem('json_data'));
     if (!json_temp) {
@@ -78,6 +74,7 @@ function storeTodoLocal(todoTitle) {
         "id": todoID,
         "title": todoTitle,
         "notes": todoNote,
+        "dateDue": todoDate,
         "completed": false
     });
 
@@ -103,14 +100,14 @@ function deleteAllTodo() {
 
 //Function to view the todo in the list
 function viewTodo(todoID){
-    var popout = document.getElementById("view-popout");
-    var close = document.getElementsByClassName("popout-close");
+    popout = document.getElementById("view-popout");
+    close = document.getElementsByClassName("popout-close");
     
-    var json_temp = JSON.parse(localStorage.getItem('json_data'));
-    var selectedTodo = json_temp[todoID];
+    json_temp = JSON.parse(localStorage.getItem('json_data'));
+    selectedTodo = json_temp[todoID];
 
     $("#view-popout .modal-title").text(selectedTodo.title);
-    $("#view-popout .modal-body").html('<p>Notes: ' + selectedTodo.notes + '</p>');
+    $("#view-popout .modal-body").html('<p>Notes: ' + selectedTodo.notes + '</p>' + '<br>' + '<p> Due Date: ' + selectedTodo.dateDue + '</p>');
     
     $("#view-popout .edit-todo").remove();
     $("#view-popout .edit-delete").remove();
@@ -129,6 +126,7 @@ function editTodo(todoID){
 
     $('#edit-popout #edit-title').val(selectedTodo.title);
     $('#edit-popout #edit-notes').val(selectedTodo.notes);
+    $('#edit-popout #edit-date').val(selectedTodo.dateDue);
     $("#edit-popout #edit-id").val(todoID);
 
     $('#view-popout').modal('hide');
@@ -143,9 +141,24 @@ function saveTodo(todoID){
 
     selectedTodo.title = $("#edit-popout #edit-title").val();
     selectedTodo.notes = $("#edit-popout #edit-notes").val();
+    selectedTodo.dateDue = $("#edit-popout #edit-date").val();
 
     json_temp[todoID] = selectedTodo;
+    console.log(json_temp);
     localStorage.setItem('json_data', JSON.stringify(json_temp));
+
+    $("#view-popout .modal-title").text(selectedTodo.title);
+    $("#view-popout .modal-body").html('<p>Notes: ' + selectedTodo.notes + '</p>' + '<br>' + '<p> Due Date: ' + selectedTodo.dateDue + '</p>');
+
     $("#edit-popout").modal('hide');
     $("#view-popout").modal('show');
+
+    var todoHTML = '<li class="todoli" style="display:none" data-id="' + selectedTodo.id + '">' + selectedTodo.title;
+    todoViewBtn = '<br><a href="#" class="btn btn-sm btn-add view">View</a>'
+    todoDeleteBtn = '<a href="#" class="btn btn-sm btn-delete delete" >Delete</a></li>'
+    $("#todo-list").html(todoHTML + todoViewBtn + todoDeleteBtn);
+    $("li[data-id="+todoID+"]").fadeIn();
+
+    registerEventListeners();
 }
+
