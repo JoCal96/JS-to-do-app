@@ -28,9 +28,27 @@
             <div class="row">
                 <div class="col">
                     <h3 class="subtitle">Your Current To-Dos:</h3>
-                    <ul id="todo-list"></ul>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="active" aria-selected="true">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">Completed</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="todoTabsContent">
+                        <div class="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab" tabindex="0">
+                            <ul id="todo-list">
+                                <!-- Active todos will be appended here -->
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab" tabindex="0">
+                            <ul id="completed-todo-list">
+                                <!-- Completed todos will be appended here -->
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-
                 <div id="view-popout" class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -72,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="col-md-4">
                     <h3>Add A New To-Do</h3>
                     <form>
@@ -84,7 +102,18 @@
                         <button onClick="newTodo()" class="addBtn btn btn-add btn-lg form-control mt-3">Add To Do</span>
                     </form>
                     <button onClick="deleteAllTodo()" class="addBtn btn btn-deleteall btn-lg form-control mt-5">Delete All To Dos</span>
+                    <button onClick="deleteCompletedTodo()" class="addBtn btn btn-deleteall btn-lg form-control mt-5">Delete Completed To Dos</span>
+
                 </div>
+                
+                <!-- <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="subtitle">Your Completed To-Dos:</h3>
+                            <ul id="completed-todo-list"></ul>
+                        </div>
+                    </div>
+                </div> -->
             </div>
         </div>
         </main>

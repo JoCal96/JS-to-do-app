@@ -34,13 +34,8 @@ body {
 .todoli > li {
     list-style: none;
 }
-
 .todo-title {
-    margin-right: 10px; /* Adjust the margin as needed */
-}
-
-.todo-date {
-    margin-left: 10px; /* Adjust the margin as needed */
+    margin-right: 10px; 
 }
 
 /*Pop Up Styling */
@@ -69,6 +64,21 @@ h5 {
 }
 .forminput {
     padding: 2%;
+}
+
+/* Completed To Do Styling */
+#completed-todo-list {
+    font-size: 1.5em;
+}
+.completedtodoli {
+    padding-bottom: 0.4em;
+}
+.completedtodoli > li {
+    list-style: none;
+}
+
+.completedtodoli-title {
+    margin-right: 10px; 
 }
 
 /* Button Colouring */
@@ -119,6 +129,25 @@ h5 {
     color:white;
 }
 
+.btn-comp {
+    background-color: yellow;
+    outline: purple;
+    margin-left: 5%;
+}
+
+.btn-comp:hover {
+    background-color: #efd3d7;
+}
+
+.btn-comp:visited{
+    background-color: pink;
+    outline: purple;
+}
+
+.btn-comp:active{
+    background-color: pink;
+    outline: purple;
+}
 
 /* Footer Editing */
 footer {
