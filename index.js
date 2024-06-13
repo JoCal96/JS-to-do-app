@@ -1,49 +1,57 @@
+//JavaScript for the functionality of the ToDo Web App
 
-var json_data = JSON.parse(localStorage.getItem('json_data'));
-var json_completed_data = JSON.parse(localStorage.getItem('json_completed_data'));
+document.addEventListener('DOMContentLoaded', (event) => {
+    loadTodos();
+    registerEventListeners();
+});
 
-if (json_data.length > 0) {
-    json_data.forEach(element => {
-        if (element && element.completed) {
-            newTodo(element.title, element.id);
-        }
-    });
+//Function to load the todos
+function loadTodos() {
+    json_data = JSON.parse(localStorage.getItem('json_data')) || [];
+    json_completed_data = JSON.parse(localStorage.getItem('json_completed_data')) || [];
+
+    $("#todo-list").empty();
+    $("#completed-todo-list").empty();
+
+    if (json_data.length > 0) {
+        json_data.forEach(element => {
+            if (element && !element.completed) {
+                newTodo(element.title, element.id, element.notes, element.dateDue);
+            }
+        });
+    }
+    if (json_completed_data.length > 0) {
+        json_completed_data.forEach(element => {
+            if (element) {
+                completedTodoHTML = '<li class="todoli" data-id="' + element.id + '">' + element.title + '</li>';
+                $("#completed-todo-list").append(completedTodoHTML);
+            }
+        });
+    }
 }
-
-registerEventListeners();
 
 function registerEventListeners() {
     $(".delete").on("click", function() {
-        var todoID = $(this).parent().attr('data-id');
+        todoID = $(this).parent().attr('data-id');
             deleteTodo(todoID);
     });
 
     $(".view").on("click", function(){
-        var todoID = $(this).parent().attr('data-id');
+        todoID = $(this).parent().attr('data-id');
             viewTodo(todoID);
     });
 
     $(".edit").on("click", function(){
-        var todoID = $(this).parent().attr('data-id');
+        todoID = $(this).parent().attr('data-id');
             editTodo(todoID);
     });
     $(".complete").on("click", function(){
-        var todoID = $(this).parent().attr('data-id');
+        todoID = $(this).parent().attr('data-id');
             completeTodo(todoID);
     });
 }
-        
 
-//Function to delete an individual todo
-function deleteTodo(todoID) {
-    $("li[data-id="+todoID+"]").fadeOut();
-    var json_temp = JSON.parse(localStorage.getItem('json_data'));
-    delete json_temp[todoID];
-    localStorage.setItem('json_data',JSON.stringify(json_temp)
-    );
-}
-
-// create a new todo with view and delete buttons
+//Function to create a new todo with view and delete buttons
 function newTodo(todoTitle, todoID, todoNote, todoDate) {
     if (!todoTitle && !todoID) {
         todoTitle = document.getElementById("todoTitle").value;
@@ -51,15 +59,15 @@ function newTodo(todoTitle, todoID, todoNote, todoDate) {
         todoDate = document.getElementById("todoDate").value;
 
         if (todoTitle){
-            var todoID = storeTodoLocal(todoTitle, todoNote, todoDate);
+            todoID = storeTodoLocal(todoTitle, todoNote, todoDate);
         }
     }
 
     if(todoTitle){
-        var todoHTML = '<li class="todoli col-9" data-id="' + todoID + '">' + todoTitle;
+        todoHTML = '<li class="todoli col-9" data-id="' + todoID + '">' + todoTitle;
         todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-add view">View</a>'
         todoDeleteBtn = '<a href="#" class="col-2 btn btn-sm btn-delete delete">Delete</a>'
-        todoCompleteBtn = '<a href="#" class="col-2 btn btn-sm btn-add complete">Complete</a></li>';
+        todoCompleteBtn = '<a href="#" class="col-2 btn btn-sm btn-comp complete">Complete</a></li>';
 
         $("#todo-list").append(todoHTML + todoViewBtn + todoDeleteBtn + todoCompleteBtn);
         $("li[data-id="+todoID+"]").fadeIn();
@@ -67,16 +75,15 @@ function newTodo(todoTitle, todoID, todoNote, todoDate) {
         registerEventListeners();
     } 
 }
-
+//Function to retrieve and parse existing json from localstorage, add a new todo object to the JSON, stringify it and store back in the localStorage
 function storeTodoLocal(todoTitle, todoNote, todoDate) {
-    //retrieve and parse existing json from localstorage
-    var json_temp = JSON.parse(localStorage.getItem('json_data'));
+    
+    json_temp = JSON.parse(localStorage.getItem('json_data'));
     if (!json_temp) {
         json_temp = [];
     }
-    var todoID = json_temp.length;
+    todoID = json_temp.length;
 
-    //add new todo object to JSON
     json_temp.push({
         "id": todoID,
         "title": todoTitle,
@@ -85,17 +92,21 @@ function storeTodoLocal(todoTitle, todoNote, todoDate) {
         "completed": false
     });
 
-    //log updated JSON to console
-    console.log(json_temp);
-
-    //stringify updated JSON and store back in localStorage
     localStorage.setItem('json_data', JSON.stringify(json_temp));
     
-    //return ID of new todo
     return todoID;
  }
 
- //Button to delete all the todos in the list
+//Function to delete an individual todo
+function deleteTodo(todoID) {
+    $("li[data-id="+todoID+"]").fadeOut();
+    json_temp = JSON.parse(localStorage.getItem('json_data'));
+    delete json_temp[todoID];
+    localStorage.setItem('json_data',JSON.stringify(json_temp)
+    );
+}
+
+//Function to delete all the todos in the list
 function deleteAllTodo() {
     if (confirm("Are you sure you want to delete all your To Dos?")) {
     localStorage.removeItem('json_data');
@@ -124,10 +135,10 @@ function viewTodo(todoID){
     registerEventListeners();
 }
 
-//Function to edit the todo
+//Function to edit the todo and resave it to ensure the updated todo now shows
 function editTodo(todoID){
-    var json_temp = JSON.parse(localStorage.getItem('json_data'));
-    var selectedTodo = json_temp[todoID];
+    json_temp = JSON.parse(localStorage.getItem('json_data'));
+    selectedTodo = json_temp[todoID];
 
     $('#edit-popout #edit-title').val(selectedTodo.title);
     $('#edit-popout #edit-notes').val(selectedTodo.notes);
@@ -140,16 +151,15 @@ function editTodo(todoID){
 }
 
 function saveTodo(todoID){
-    var todoID = $("#edit-id").val();
-    var json_temp = JSON.parse(localStorage.getItem('json_data'));
-    var selectedTodo = json_temp[todoID];
+    todoID = $("#edit-id").val();
+    json_temp = JSON.parse(localStorage.getItem('json_data'));
+    selectedTodo = json_temp[todoID];
 
     selectedTodo.title = $("#edit-popout #edit-title").val();
     selectedTodo.notes = $("#edit-popout #edit-notes").val();
     selectedTodo.dateDue = $("#edit-popout #edit-date").val();
 
     json_temp[todoID] = selectedTodo;
-    console.log(json_temp);
     localStorage.setItem('json_data', JSON.stringify(json_temp));
 
     $("#view-popout .modal-title").text(selectedTodo.title);
@@ -158,30 +168,52 @@ function saveTodo(todoID){
     $("#edit-popout").modal('hide');
     $("#view-popout").modal('show');
 
-    var todoHTML = '<li class="todoli" style="display:none" data-id="' + selectedTodo.id + '">' + selectedTodo.title;
-    todoViewBtn = '<br><a href="#" class="btn btn-sm btn-add view">View</a>'
-    todoDeleteBtn = '<a href="#" class="btn btn-sm btn-delete delete" >Delete</a>'
-    todoCompleteBtn = '<a href="#" class="col-2 btn btn-sm btn-add complete">Complete</a></li>';
+    todoHTML = '<li class="todoli" style="display:none" data-id="' + selectedTodo.id + '">' + selectedTodo.title;
+    todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-add view">View</a>'
+    todoDeleteBtn = '<a href="#" class="col-2 btn btn-sm btn-delete delete">Delete</a>'
+    todoCompleteBtn = '<a href="#" class="col-2 btn btn-sm btn-comp complete">Complete</a></li>';
     $("#todo-list").html(todoHTML + todoViewBtn + todoDeleteBtn + todoCompleteBtn);
     $("li[data-id="+todoID+"]").fadeIn();
 
     registerEventListeners();
 }
 
+//Function to complete the todo
 function completeTodo(todoID) {
-    $("li[data-id="+todoID+"]").fadeOut();
-    var json_data = JSON.parse(localStorage.getItem('json_data'))
-    var json_completed_data = JSON.parse(localStorage.getItem('json_completed_data'));
-    var todoIndex = json_data.findIndex(todo => todo.id == todoID)
+    console.log("completeTodo called with ID:", todoID);
 
-    if (todoIndex !== -1) {
-        var completedTodo = json_data.splice(todoIndex, 1)[0];
-        completedTodo.completed = true;
-        json_completed_data.push(completedTodo);
-        localStorage.setItem('json_data', JSON.stringify(json_data));
-        localStorage.setItem('json_completed_data', JSON.stringify(json_completed_data));
-        console.log(json_completed_data);
-    }
-    registerEditListeners();
+    $("li[data-id=" + todoID + "]").fadeOut(function() {
+        $(this).remove()});
+
+        json_data = JSON.parse(localStorage.getItem('json_data')) || [];
+        json_completed_data = JSON.parse(localStorage.getItem('json_completed_data')) || [];
+        if (!Array.isArray(json_data)) {
+            json_data = [];
+        }
+
+        todoIndex = json_data.findIndex(todo => todo.id == todoID);
+
+        if (todoIndex !== -1) {
+            completedTodo = json_data.splice(todoIndex, 1)[0];
+            completedTodo.completed = true;
+            json_completed_data.push(completedTodo);
+
+            localStorage.setItem('json_data', JSON.stringify(json_data));
+            localStorage.setItem('json_completed_data', JSON.stringify(json_completed_data));
+
+            completedTodoHTML = '<li class="completedtodoli" style="display:none" data-id="' + completedTodo.id + '">' + completedTodo.title + '</li>';
+            $("#completed-todo-list").append(completedTodoHTML);
+            $("li[data-id=" + completedTodo.id + "]").fadeIn();
+
+            if (typeof registerEventListeners === "function") {
+                registerEventListeners();
+            };
+        }
 }
-
+//Function to delete completed todos from the list
+function deleteCompletedTodo() {
+    if (confirm("Are you sure you want to delete your completed To Dos?")) {
+        localStorage.removeItem('json_completed_data');
+        $("#completed-todo-list").empty();
+    }
+}

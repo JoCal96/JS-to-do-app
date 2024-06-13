@@ -6,7 +6,9 @@
 
 <p> As part of my apprenticeship learning, the To-Do App was a tutorial to follow as an introduction to JS. The original tutorial came from the Cloud Academy training system. Since completing, I want to build on this app, adding more features and styling for a more functional and appealing finish.
 
-Currently users can: add a new to-do, delete individual to-do and delete all the To-Dos. </p>
+Currently users can: add a new to-do, delete individual to-dos, delete all the To-Dos, edit a to-do and complete a to-do. completed to-dos get added to a completed tab which the user can switch between to view active and completed to-dos.
+
+Working On: CSS to improve the styling of the whole app.</p>
 
 <h2>Technologies 💻</h2>
 <ul>
