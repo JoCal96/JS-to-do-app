@@ -23,7 +23,7 @@ function loadTodos() {
     if (json_completed_data.length > 0) {
         json_completed_data.forEach(element => {
             if (element) {
-                completedTodoHTML = '<li class="todoli" data-id="' + element.id + '">' + element.title + '</li>';
+                completedTodoHTML = '<li class="completedtodoli" data-id="' + element.id + '">' + element.title + '</li>';
                 $("#completed-todo-list").append(completedTodoHTML);
             }
         });
@@ -104,6 +104,7 @@ function deleteTodo(todoID) {
     delete json_temp[todoID];
     localStorage.setItem('json_data',JSON.stringify(json_temp)
     );
+    loadTodos();
 }
 
 //Function to delete all the todos in the list
@@ -176,39 +177,35 @@ function saveTodo(todoID){
     $("li[data-id="+todoID+"]").fadeIn();
 
     registerEventListeners();
+    loadTodos();
 }
 
 //Function to complete the todo
 function completeTodo(todoID) {
-    console.log("completeTodo called with ID:", todoID);
+    $("li[data-id=" + todoID + "]").remove().fadeOut();
+    json_data = JSON.parse(localStorage.getItem('json_data')) || [];
+    json_completed_data = JSON.parse(localStorage.getItem('json_completed_data')) || [];
 
-    $("li[data-id=" + todoID + "]").fadeOut(function() {
-        $(this).remove()});
+    json_data = json_data.filter(todo => todo !== null);
+    todoIndex = json_data.findIndex(todo => todo.id == todoID);
+    // todoIndex = json_data.findIndex(todo => todo && todo.id == todoID);
 
-        json_data = JSON.parse(localStorage.getItem('json_data')) || [];
-        json_completed_data = JSON.parse(localStorage.getItem('json_completed_data')) || [];
-        if (!Array.isArray(json_data)) {
-            json_data = [];
-        }
 
-        todoIndex = json_data.findIndex(todo => todo.id == todoID);
+    if (todoIndex !== -1) {
+        completedTodo = json_data.splice(todoIndex, 1)[0];
+        completedTodo.completed = true;
+        json_completed_data.push(completedTodo);
 
-        if (todoIndex !== -1) {
-            completedTodo = json_data.splice(todoIndex, 1)[0];
-            completedTodo.completed = true;
-            json_completed_data.push(completedTodo);
+        localStorage.setItem('json_data', JSON.stringify(json_data));
+        localStorage.setItem('json_completed_data', JSON.stringify(json_completed_data));
 
-            localStorage.setItem('json_data', JSON.stringify(json_data));
-            localStorage.setItem('json_completed_data', JSON.stringify(json_completed_data));
+        completedTodoHTML = '<li class="completedtodoli" style="display:none" data-id="' + completedTodo.id + '">' + completedTodo.title + '</li>';
+        $("#completed-todo-list").append(completedTodoHTML);
+        $("li[data-id=" + completedTodo.id + "]").fadeIn();
 
-            completedTodoHTML = '<li class="completedtodoli" style="display:none" data-id="' + completedTodo.id + '">' + completedTodo.title + '</li>';
-            $("#completed-todo-list").append(completedTodoHTML);
-            $("li[data-id=" + completedTodo.id + "]").fadeIn();
-
-            if (typeof registerEventListeners === "function") {
-                registerEventListeners();
-            };
-        }
+        registerEventListeners();
+    }
+    loadTodos();
 }
 //Function to delete completed todos from the list
 function deleteCompletedTodo() {
