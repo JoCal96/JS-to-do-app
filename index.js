@@ -65,7 +65,7 @@ function newTodo(todoTitle, todoID, todoNote, todoDate) {
 
     if(todoTitle){
         todoHTML = '<li class="todoli col-9" data-id="' + todoID + '">' + todoTitle;
-        todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-add view">View</a>'
+        todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-view view">View</a>'
         todoDeleteBtn = '<a href="#" class="col-2 btn btn-sm btn-delete delete">Delete</a>'
         todoCompleteBtn = '<a href="#" class="col-2 btn btn-sm btn-comp complete">Complete</a></li>';
 
@@ -113,6 +113,7 @@ function deleteAllTodo() {
     localStorage.removeItem('json_data');
     $("#todo-list").empty();
     }
+    loadTodos();
 }
 
 //Function to view the todo in the list
@@ -128,7 +129,7 @@ function viewTodo(todoID){
     
     $("#view-popout .edit-todo").remove();
     $("#view-popout .edit-delete").remove();
-    $("#view-popout .modal-footer").append('<button class="btn btn-add edit-todo" onclick="editTodo(' + todoID + ')">Edit</button>');
+    $("#view-popout .modal-footer").append('<button class="btn btn-comp edit-todo" onclick="editTodo(' + todoID + ')">Edit</button>');
     $("#view-popout .modal-footer").append('<button type="button" class="btn btn-delete edit-delete" data-bs-dismiss="modal">Close</button>')
 
     $("#view-popout").modal('show');
@@ -170,7 +171,7 @@ function saveTodo(todoID){
     $("#view-popout").modal('show');
 
     todoHTML = '<li class="todoli" style="display:none" data-id="' + selectedTodo.id + '">' + selectedTodo.title;
-    todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-add view">View</a>'
+    todoViewBtn = '<br><a href="#" class="col-2 btn btn-sm btn-view view">View</a>'
     todoDeleteBtn = '<a href="#" class="col-2 btn btn-sm btn-delete delete">Delete</a>'
     todoCompleteBtn = '<a href="#" class="col-2 btn btn-sm btn-comp complete">Complete</a></li>';
     $("#todo-list").html(todoHTML + todoViewBtn + todoDeleteBtn + todoCompleteBtn);
@@ -188,8 +189,6 @@ function completeTodo(todoID) {
 
     json_data = json_data.filter(todo => todo !== null);
     todoIndex = json_data.findIndex(todo => todo.id == todoID);
-    // todoIndex = json_data.findIndex(todo => todo && todo.id == todoID);
-
 
     if (todoIndex !== -1) {
         completedTodo = json_data.splice(todoIndex, 1)[0];

@@ -1,27 +1,51 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
-    background-color: #cbc0d3;
+    background-color: white;
     min-height: 100vh;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: monospace;
 }
 
 /* Navbar/Head Colouring */
 .navbar {
-    background-color: #8e9aaf;
+    background-color: #C5CCD2;
+    display: block;
 }
 .navbar .navbar-brand {
     font-size: 1.8em;
-    color: #efd3d7;
-    font-family: 'Comforter Brush', cursive;
+}
+.container1 {
+    color: black;
+    margin-left: 5%;
+    background-color: #ffbf00;
+    border-radius: 18%;
+    padding: 1%;
+    display:inline-flex;
+    font-family:monospace;
+    text-align: middle;
 }
 
-.container1 .title {
-    text-align:right;
-    color: #efd3d7;
+/* Main structure */
+.containermain {
+    padding: 2%; 
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 1em;
+    flex-grow: 1;
 }
 
-.container .subtitle {
-    padding: 1rem; 
-    font-size: 1.7em;
+/* To Do Tab Styling */
+.nav-link{
+    color: #708090;
+}
+.nav-link:hover{
+    color: #ffbf00;
 }
 
 /* To Do Styling */
@@ -31,21 +55,18 @@ body {
 .todoli {
     padding-bottom: 0.4em;
 }
-.todoli > li {
-    list-style: none;
-}
 .todo-title {
     margin-right: 10px; 
 }
 
 /*Pop Up Styling */
 #view-popout {
-    background-color: rgb(203, 192, 211, 0.5);
+    background-color: rgb(111, 128, 144, 0.5);
     backdrop-filter: 10px;
 }
 
 .modal-header {
-    background-color: #efd3d7;
+    background-color: #C5CCD2;
 }
 
 .modal-title {
@@ -83,87 +104,89 @@ h5 {
 
 /* Button Colouring */
 .btn-add {
-    background-color: pink;
-    outline: purple;
+    background-color: #ffbf00;
+    outline: #ffbf00;
 }
-
 .btn-add:hover {
-    background-color: #efd3d7;
+    background-color: #d8b04a;
 }
-
-.btn-add:visited{
-    background-color: pink;
-    outline: purple;
-}
-
-.btn-add:active{
-    background-color: pink;
-    outline: purple;
-}
-
+/* Delete All */
 .btn-deleteall {
-    background-color: #8e9aaf;
+    background-color: #708090;
 }
-
 .btn-deleteall:hover {
-    background-color: rgb(84, 18, 90);
-    color: white;
+    background-color: #C5CCD2;
+    color: black;
 }
-
 .btn-deleteall:active {
-    background-color: rgb(84, 18, 90);
-    color: white;
+    background-color: #708090;
+    color: black;
 }
-
 .btn-deleteall:visited {
-    background-color: #8e9aaf;
+    background-color: #708090;
 }
-
+/* Delete Completed */
+.btn-compdelete {
+    background-color: #C5CCD2;
+    outline: #C5CCD2;
+}
+.btn-compdelete:hover {
+    background-color: #708090;
+}
+.btn-compdelete:visited{
+    background-color: #C5CCD2;
+    outline: #C5CCD2;
+}
+.btn-compdelete:active{
+    background-color: #C5CCD2;
+    outline: #C5CCD2;
+}
+/* View */
+.btn-view {
+    background-color: #C5CCD2;
+    outline: #C5CCD2;
+}
+.btn-view:hover {
+    background-color: #708090;
+}
+/* Delete Individual */
 .btn-delete {
-    background-color: #8e9aaf;
+    background-color: #708090;
     margin-left: 5%;
 }
-
 .btn-delete:hover {
-    background-color: rgb(84, 18, 90);
-    color:white;
+    background-color: #C5CCD2;
+    color:black;
 }
-
+/* Complete */
 .btn-comp {
-    background-color: yellow;
-    outline: purple;
+    background-color: #ffbf00;
+    outline: #ffbf00;
     margin-left: 5%;
 }
-
 .btn-comp:hover {
-    background-color: #efd3d7;
-}
-
-.btn-comp:visited{
-    background-color: pink;
-    outline: purple;
-}
-
-.btn-comp:active{
-    background-color: pink;
-    outline: purple;
+    background-color: #d8b04a;
 }
 
 /* Footer Editing */
 footer {
-    position: fixed;
-    bottom: 0;
     width: 100%;
-    text-align: center;
-    height: 4.5rem;
-    background-color: #8e9aaf;
-}
-
-footer a {
-    position: absolute;
+    height: 4rem;
     bottom: 0;
-    right: 2%;
-    color: #efd3d7;
-    font-size: 1.6em;
-    font-family: 'Comforter Brush', cursive;
+    background-color: #C5CCD2;
+    text-justify: auto;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 3rem;
+    padding-top: 1rem;
+    flex-shrink: 0;
+}
+footer a {
+    color: black;
+    font-size: 1em;
+}
+footer a:hover {
+    background-color: #ffbf00;
+    padding:1%;
+    border-radius: 18%;
 }
