@@ -18,5 +18,5 @@ Working On: Currently complete - June 2024. </p>
 </ul>
 
 <h2>What the web app looks like:</h2>
-<img width="960" alt="23 01 24 Screenshot" src="https://github.com/JoCal96/JS-to-do-app/assets/137909187/4dea6041-12a5-4f25-bd2d-7262825e3d3d">
+<img width="960" alt="Finished To-Do Web App" src="https://github.com/JoCal96/JS-to-do-app/assets/137909187/eca511b0-e190-454b-b4e2-be193fae421b">
 
